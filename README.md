@@ -57,3 +57,59 @@ A few examples of extras for this coding challenge:
 4. Running the application in a serverless environment
 
 This is not an exhaustive list of extra features that could be added to this code challenge. At the end of the day, this section is for you to demonstrate any skills you want to show that’s not captured in the core requirement.
+
+
+
+AWS EC2 Instance address
+http://http://3.15.180.219/
+
+
+
+## How to Deploy to AWS EC2
+
+## Tools Used:
+  1. AWS EC2
+
+## Packages Necessary
+  1. NGINX
+  2. PM2
+  3. 
+
+## Steps:
+
+Creating AWS EC2 Instance
+1. Create an AWS Ubuntu EC2 instance. freetier is fine to use for the deployment.
+2. Configure Security Groups to allow traffic on port 80 (HTTP) and 443 (HTTPS) and SSH
+3. Download SSH Keys
+4. SSH into the EC2 Instance
+5. Run `sudo apt-get update` to update the packages on the instance
+
+Download packages
+1. Run `sudo apt-get install nginx` and install nginx
+2. Run this shell script to install npm and node `curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -`
+3. Now install latest version of nodejs for ubuntu `sudo apt-get install -y nodejs`
+4. Install pm2 library for us to run 2 node processes at the same time `sudo npm install pm2`
+
+
+Configure Nginx default file
+1. We need to configure the default file for nginx to point to the port we will be running our server on. Run the command `sudo vim /etc/nginx/sites-availible/default
+and delete everything and use this as the configuration
+
+server {
+listen 80;
+server_name _;
+
+location / {
+proxy_set_header X-Forwarded-For $remote_addr;
+proxy_set_header Host $http_host;
+proxy_pass http://172.31.38.77:3000;
+}
+}
+
+Running the backend and frontent
+Now we will run both the backend and the frontend at the same time, this is how we will be able to run our application.
+1. git clone this repository
+2. cd into the backend directory and run npm ci
+3. run `sudo pm2 index.js`
+4. cd into the frontend directory
+5. run `npm ci` and `npm start` to start the react front end application. Now our application is built.
